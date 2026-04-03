@@ -83,22 +83,22 @@
 
     <div class="motivation-cards reveal">
       <div class="mcard mcard-bad">
-        <div class="mcard-icon">🎞️</div>
+        <div class="mcard-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 6V4m10 2V4M2 10h20"/></svg></div>
         <h3>Passive MLLM</h3>
         <p>Processes <em>all</em> uniformly sampled frames at once. A single relevant frame is buried among hundreds of irrelevant ones — leading to visual misguidance and <strong>wrong answers</strong>.</p>
-        <div class="verdict bad">✗ No selective attention</div>
+        <div class="verdict bad">&#x2717; No selective attention</div>
       </div>
       <div class="mcard mcard-mid">
-        <div class="mcard-icon">🤖</div>
+        <div class="mcard-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M9 8V5a3 3 0 016 0v3M9 14h.01M15 14h.01M12 17v1"/></svg></div>
         <h3>Traditional Agent</h3>
         <p>Adds tool calls, but remains <em>perception-first</em>: the agent sees uniform frames before reasoning. Fixed FPS and resolution prevent adaptive information gathering.</p>
-        <div class="verdict mid">✗ Rigid, manual workflow</div>
+        <div class="verdict mid">&#x2717; Rigid, manual workflow</div>
       </div>
       <div class="mcard mcard-good">
-        <div class="mcard-icon">👁️</div>
+        <div class="mcard-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>EVA (Ours)</h3>
         <p><em>Plans before perceiving</em>: reads only the question, forms a strategy, then selects exactly which frames to fetch at what resolution — using 98% fewer tokens.</p>
-        <div class="verdict good">✓ Planning-before-perception</div>
+        <div class="verdict good">&#x2713; Planning-before-perception</div>
       </div>
     </div>
 
@@ -120,22 +120,22 @@
     <h2 class="section-title reveal">Why Planning-Before-Perception Works</h2>
     <div class="why-grid reveal">
       <div class="why-card">
-        <div class="why-icon">🚫</div>
+        <div class="why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg></div>
         <h3>Avoids Visual Misguidance</h3>
         <p>Uniformly sampled frames often contain irrelevant actions that mislead the model. EVA establishes intent textually <em>before</em> any visual interaction, preventing distraction from noisy frames.</p>
       </div>
       <div class="why-card">
-        <div class="why-icon">⚡</div>
+        <div class="why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h3>Saves Visual Tokens</h3>
         <p>By identifying which segments matter upfront, EVA fetches only necessary frames at optimal resolution — reducing visual token consumption by up to <strong>98%</strong> compared to Qwen2.5-VL.</p>
       </div>
       <div class="why-card">
-        <div class="why-icon">🎯</div>
+        <div class="why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h3>Active, Goal-Driven Perception</h3>
         <p>The iterative <strong>Summary → Plan → Action → Reflection</strong> loop enables the agent to autonomously adapt its strategy based on what it sees — like a detective gathering evidence.</p>
       </div>
       <div class="why-card">
-        <div class="why-icon">📐</div>
+        <div class="why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
         <h3>Flexible Tool Interface</h3>
         <p>EVA's tools expose <code>nframes</code>, <code>resize</code>, <code>start_time</code>, and <code>end_time</code> — giving the agent full control over perception granularity. Traditional agents use fixed FPS.</p>
       </div>
@@ -156,25 +156,25 @@
       <h3 class="loop-title">Iterative Reasoning Loop</h3>
       <div class="loop-steps">
         <div class="loop-step">
-          <div class="loop-icon">📝</div>
+          <div class="loop-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
           <div class="loop-label">Summary</div>
           <div class="loop-desc">Summarize current observations and known facts</div>
         </div>
         <div class="loop-arrow">→</div>
         <div class="loop-step">
-          <div class="loop-icon">🗺️</div>
+          <div class="loop-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></div>
           <div class="loop-label">Plan</div>
           <div class="loop-desc">Decide what to look at next and why</div>
         </div>
         <div class="loop-arrow">→</div>
         <div class="loop-step">
-          <div class="loop-icon">🔧</div>
+          <div class="loop-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
           <div class="loop-label">Action</div>
           <div class="loop-desc">Issue tool call with precise params</div>
         </div>
         <div class="loop-arrow">→</div>
         <div class="loop-step">
-          <div class="loop-icon">🔍</div>
+          <div class="loop-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
           <div class="loop-label">Reflection</div>
           <div class="loop-desc">Evaluate evidence; repeat or answer</div>
         </div>
@@ -222,22 +222,205 @@
   </div>
 </section>
 
-<!-- ===== DEMO VIDEO ===== -->
+<!-- ===== HOW EVA WORKS ===== -->
 <section class="section section-dark" id="demo">
   <div class="container">
-    <h2 class="section-title reveal">Demo</h2>
+    <h2 class="section-title reveal">How EVA Works</h2>
     <p class="section-subtitle reveal">
-      Watch EVA plan before perceiving — and compare it against passive and traditional agent approaches.
+      EVA autonomously decides <strong>what</strong>, <strong>when</strong>, and <strong>how</strong> to watch —
+      through an iterative plan–act–reflect loop. The animation below shows a real example.
     </p>
-    <div class="video-wrapper reveal">
-      <video id="demo-video" controls muted playsinline loop poster="static/media/fig1.png">
-        <source src="static/media/demo.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <p class="fig-caption reveal">
-      EVA first reads the question, forms a strategy, surveys the full video at low resolution, then zooms into the relevant segment — achieving the correct answer with minimal visual tokens.
-    </p>
+
+    <div class="eva-demo reveal">
+
+      <!-- Step indicator -->
+      <div class="demo-steps">
+        <button class="demo-step-btn active" data-step="0">
+          <span class="step-num">1</span><span class="step-label">Question</span>
+        </button>
+        <div class="step-connector"></div>
+        <button class="demo-step-btn" data-step="1">
+          <span class="step-num">2</span><span class="step-label">Plan</span>
+        </button>
+        <div class="step-connector"></div>
+        <button class="demo-step-btn" data-step="2">
+          <span class="step-num">3</span><span class="step-label">Survey</span>
+        </button>
+        <div class="step-connector"></div>
+        <button class="demo-step-btn" data-step="3">
+          <span class="step-num">4</span><span class="step-label">Locate</span>
+        </button>
+        <div class="step-connector"></div>
+        <button class="demo-step-btn" data-step="4">
+          <span class="step-num">5</span><span class="step-label">Zoom</span>
+        </button>
+        <div class="step-connector"></div>
+        <button class="demo-step-btn" data-step="5">
+          <span class="step-num">6</span><span class="step-label">Answer</span>
+        </button>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="demo-progress-track"><div class="demo-progress-bar" id="demoProgress"></div></div>
+
+      <!-- Main demo area -->
+      <div class="demo-stage">
+
+        <!-- Left column: Agent state -->
+        <div class="demo-left">
+
+          <!-- Step 0: Question -->
+          <div class="demo-panel active" data-panel="0">
+            <div class="demo-tag tag-question">Input Question</div>
+            <div class="demo-question">
+              <div class="q-icon">Q</div>
+              <p>"What sequence of actions did the camera wearer perform while adjusting and using a microscope for sample analysis?"</p>
+            </div>
+            <div class="demo-options">
+              <div class="opt">A: Place petri dish → add solution → adjust microscope → remove gloves</div>
+              <div class="opt opt-correct">B: Place petri dish → adjust eyepieces → sanitize hands → operate microscope → store dish → retrieve another → remove gloves</div>
+              <div class="opt">C: Sanitize hands → place slide → capture images → adjust microscope</div>
+              <div class="opt">D: Clean microscope → place slide → adjust knobs → record data</div>
+            </div>
+            <div class="demo-stat-row">
+              <div class="demo-stat"><span class="stat-val">0</span><span class="stat-key">frames loaded</span></div>
+              <div class="demo-stat"><span class="stat-val">0</span><span class="stat-key">visual tokens</span></div>
+            </div>
+          </div>
+
+          <!-- Step 1: Plan -->
+          <div class="demo-panel" data-panel="1">
+            <div class="demo-tag tag-plan">EVA Reasoning</div>
+            <div class="demo-thought">
+              <div class="thought-header">
+                <span class="thought-icon">&#x1F9E0;</span>
+                <span>Planning Strategy</span>
+              </div>
+              <p class="thought-text">"I need to identify a microscope-related action sequence. Rather than loading all frames at once, let me first survey the entire video at <em>low resolution</em> to locate the relevant segment efficiently."</p>
+              <p class="thought-text">"I'll sample 256 frames across the full video at 0.1× resolution — minimal tokens, maximum temporal coverage."</p>
+            </div>
+            <div class="demo-insight">
+              <span class="insight-icon">&#x26A1;</span>
+              Plans <em>without seeing any frames yet</em> — pure text reasoning
+            </div>
+            <div class="demo-stat-row">
+              <div class="demo-stat"><span class="stat-val">0</span><span class="stat-key">frames loaded</span></div>
+              <div class="demo-stat"><span class="stat-val">0</span><span class="stat-key">visual tokens</span></div>
+            </div>
+          </div>
+
+          <!-- Step 2: Survey -->
+          <div class="demo-panel" data-panel="2">
+            <div class="demo-tag tag-action">Tool Call</div>
+            <pre class="demo-code"><span class="kw">watch_video</span>({
+  start_time: <span class="num">0</span>,
+  end_time:   <span class="num">6630</span>,
+  nframes:    <span class="num">256</span>,
+  resize:     <span class="num">0.1</span>     <span class="cm">// ← low resolution</span>
+})</pre>
+            <div class="demo-thought" style="margin-top:12px">
+              <p class="thought-text" style="font-size:13px">"Surveying the full video at low resolution. Looking for microscope-related activity..."</p>
+            </div>
+            <div class="demo-stat-row">
+              <div class="demo-stat"><span class="stat-val">256</span><span class="stat-key">frames fetched</span></div>
+              <div class="demo-stat"><span class="stat-val stat-orange">~10K</span><span class="stat-key">visual tokens</span></div>
+            </div>
+          </div>
+
+          <!-- Step 3: Locate -->
+          <div class="demo-panel" data-panel="3">
+            <div class="demo-tag tag-reflect">Reflection</div>
+            <div class="demo-thought">
+              <div class="thought-header">
+                <span class="thought-icon">&#x1F50D;</span>
+                <span>Window Identified</span>
+              </div>
+              <p class="thought-text">"I can see frames around <strong>t = 3500–4000s</strong> contain relevant microscope activity. The rest of the video is background or unrelated actions."</p>
+              <p class="thought-text">"I'll now zoom into this specific window at full resolution to identify the exact action sequence."</p>
+            </div>
+            <div class="demo-locate-bar">
+              <div class="locate-track">
+                <div class="locate-fill"></div>
+                <div class="locate-window"></div>
+              </div>
+              <div class="locate-labels">
+                <span>0s</span><span style="color:var(--mid)">3500–4000s</span><span>6630s</span>
+              </div>
+            </div>
+            <div class="demo-stat-row">
+              <div class="demo-stat"><span class="stat-val">256</span><span class="stat-key">frames used</span></div>
+              <div class="demo-stat"><span class="stat-val stat-green">segment found</span><span class="stat-key"></span></div>
+            </div>
+          </div>
+
+          <!-- Step 4: Zoom -->
+          <div class="demo-panel" data-panel="4">
+            <div class="demo-tag tag-action">Tool Call</div>
+            <pre class="demo-code"><span class="kw">watch_video</span>({
+  start_time: <span class="num">3500</span>,
+  end_time:   <span class="num">4000</span>,
+  nframes:    <span class="num">50</span>,
+  resize:     <span class="num">1.0</span>     <span class="cm">// ← full resolution</span>
+})</pre>
+            <div class="demo-thought" style="margin-top:12px">
+              <p class="thought-text" style="font-size:13px">"Zooming into t=3500–4000s at full resolution to identify each action in the sequence..."</p>
+            </div>
+            <div class="demo-stat-row">
+              <div class="demo-stat"><span class="stat-val stat-green">50</span><span class="stat-key">targeted frames</span></div>
+              <div class="demo-stat"><span class="stat-val stat-green">~10K</span><span class="stat-key">total tokens used</span></div>
+            </div>
+          </div>
+
+          <!-- Step 5: Answer -->
+          <div class="demo-panel" data-panel="5">
+            <div class="demo-tag tag-answer">Correct Answer</div>
+            <div class="demo-answer-box">
+              <div class="answer-check">&#x2713;</div>
+              <div class="answer-content">
+                <div class="answer-label">Option B</div>
+                <p>Place petri dish → adjust eyepieces → sanitize hands → operate microscope → store dish → retrieve another → remove gloves</p>
+              </div>
+            </div>
+            <div class="demo-efficiency">
+              <div class="eff-row">
+                <span class="eff-label">EVA (ours)</span>
+                <div class="eff-bar-wrap">
+                  <div class="eff-bar eff-bar-eva" style="width:2%"></div>
+                </div>
+                <span class="eff-val eff-val-good">~10K tokens</span>
+              </div>
+              <div class="eff-row">
+                <span class="eff-label">Qwen2.5-VL</span>
+                <div class="eff-bar-wrap">
+                  <div class="eff-bar eff-bar-base" style="width:100%"></div>
+                </div>
+                <span class="eff-val">499K tokens</span>
+              </div>
+              <div class="eff-row">
+                <span class="eff-label">Traditional Agent</span>
+                <div class="eff-bar-wrap">
+                  <div class="eff-bar eff-bar-mid" style="width:60%"></div>
+                </div>
+                <span class="eff-val">300K tokens · Wrong</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- /demo-left -->
+
+        <!-- Right column: Visual state -->
+        <div class="demo-right">
+          <div class="demo-right-label" id="demoRightLabel">Video Timeline</div>
+
+          <!-- Canvas for frame visualization -->
+          <canvas id="demoCanvas" width="520" height="300"></canvas>
+
+          <div class="demo-right-caption" id="demoRightCaption">
+            The model has not loaded any frames yet.
+          </div>
+        </div>
+      </div><!-- /demo-stage -->
+
+    </div><!-- /eva-demo -->
   </div>
 </section>
 
