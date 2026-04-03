@@ -501,6 +501,24 @@ a:hover { text-decoration: underline; }
 .results-table tr.ours td  { color: var(--accent); }
 .results-table tr.best td  { font-weight: 700; background: rgba(0,180,216,0.06); }
 
+/* Main results table — full width, group headers */
+.main-table { width: 100%; font-size: 14px; }
+.main-table th { font-size: 12px; }
+.main-table td, .main-table th { padding: 10px 12px; text-align: center; }
+.main-table td:first-child, .main-table th:first-child { text-align: left; }
+.main-table tr.group-header td {
+  background: var(--bg3);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.main-table tr.ours.best td { background: rgba(0,180,216,0.07); }
+.main-table tr.ours.best { box-shadow: inset 3px 0 0 var(--accent); }
+
 .chart-wrap {
   max-width: 700px;
   margin: 0 auto 16px;
