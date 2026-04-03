@@ -519,6 +519,27 @@ a:hover { text-decoration: underline; }
 .main-table tr.ours.best td { background: rgba(0,180,216,0.07); }
 .main-table tr.ours.best { box-shadow: inset 3px 0 0 var(--accent); }
 
+/* Multi-benchmark table (Table 2) */
+.table-label {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 32px 0 12px;
+  color: var(--text);
+}
+.multi-bench-table td,
+.multi-bench-table th { text-align: center; }
+.multi-bench-table td:first-child { text-align: left; min-width: 160px; }
+.th-model { vertical-align: middle !important; }
+.th-group {
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.closed-source td { color: var(--text-muted); font-style: italic; }
+
 .chart-wrap {
   max-width: 700px;
   margin: 0 auto 16px;

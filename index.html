@@ -429,33 +429,159 @@
   <div class="container">
     <h2 class="section-title reveal">Evaluation Results</h2>
     <p class="section-subtitle reveal">
-      Video-Holmes zero-shot benchmark. EVA-GRPO achieves the best overall score among open-source models,
-      using only <strong style="color:var(--accent)">36.8 frames</strong> on average.
+      EVA-GRPO sets the best open-source score on every benchmark, while using far fewer frames than fixed-sampling baselines.
     </p>
 
+    <!-- Table 1: Multi-benchmark (LongVideoBench / MLVU / VideoMME / LVBench) -->
+    <h3 class="table-label reveal">Long Video Understanding Benchmarks</h3>
+    <div class="table-wrap reveal">
+      <table class="results-table main-table multi-bench-table">
+        <thead>
+          <tr>
+            <th rowspan="2" class="th-model">Model</th>
+            <th colspan="2" class="th-group">LongVideoBench</th>
+            <th colspan="2" class="th-group">MLVU</th>
+            <th colspan="2" class="th-group">VideoMME Long / Overall</th>
+            <th colspan="2" class="th-group">LVBench</th>
+          </tr>
+          <tr>
+            <th>Frames</th><th>Acc</th>
+            <th>Frames</th><th>Acc</th>
+            <th>Frames</th><th>Acc</th>
+            <th>Frames</th><th>Acc</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-header"><td colspan="9">Closed-Source Models</td></tr>
+          <tr class="closed-source">
+            <td>GPT-4o</td>
+            <td>32</td><td>58.2</td>
+            <td>0.5 fps</td><td>64.6</td>
+            <td>384</td><td>65.3 / 71.9</td>
+            <td>60</td><td>48.9</td>
+          </tr>
+          <tr class="closed-source">
+            <td>Gemini-1.5-Pro</td>
+            <td>32</td><td>55.2</td>
+            <td>—</td><td>—</td>
+            <td>0.5 fps</td><td>67.4 / 75.0</td>
+            <td>3600</td><td>33.1</td>
+          </tr>
+          <tr class="group-header"><td colspan="9">Static Frame Sampling</td></tr>
+          <tr>
+            <td>ShareGPT4Video</td>
+            <td>16</td><td>39.7</td>
+            <td>16</td><td>46.4</td>
+            <td>16</td><td>35.0 / 39.9</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>LongVA</td>
+            <td>—</td><td>—</td>
+            <td>256</td><td>56.3</td>
+            <td>128</td><td>46.2 / 52.6</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>VITA-1.5-7B</td>
+            <td>—</td><td>—</td>
+            <td>—</td><td>—</td>
+            <td>16</td><td>47.1 / 56.1</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>Video-R1</td>
+            <td>32</td><td>52.7</td>
+            <td>32</td><td>60.2</td>
+            <td>32</td><td>49.4 / 59.9</td>
+            <td>32</td><td>35.3</td>
+          </tr>
+          <tr>
+            <td>VideoChat-R1</td>
+            <td>32</td><td>49.1</td>
+            <td>32</td><td>54.3</td>
+            <td>32</td><td>46.2 / —</td>
+            <td>32</td><td>34.3</td>
+          </tr>
+          <tr>
+            <td>Qwen2.5-VL</td>
+            <td>32</td><td>43.2</td>
+            <td>32</td><td>48.4</td>
+            <td>32</td><td>44.7 / 53.6</td>
+            <td>32</td><td>31.6</td>
+          </tr>
+          <tr class="group-header"><td colspan="9">Adaptive Agent</td></tr>
+          <tr>
+            <td>VideoAgent</td>
+            <td>—</td><td>—</td>
+            <td>—</td><td>—</td>
+            <td>87</td><td>49.0 / 56.0</td>
+            <td>25.5</td><td>29.3</td>
+          </tr>
+          <tr>
+            <td>FrameThinker</td>
+            <td>21.1</td><td>52.9</td>
+            <td>23.2</td><td>59.1</td>
+            <td>24.1</td><td>47.6 / —</td>
+            <td>23.9</td><td>36.6</td>
+          </tr>
+          <tr>
+            <td>VideoMTR</td>
+            <td>—</td><td>—</td>
+            <td>—</td><td>—</td>
+            <td>32</td><td>51.0 / 59.0</td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr class="group-header"><td colspan="9">Ours</td></tr>
+          <tr class="ours">
+            <td>EVA-SFT</td>
+            <td>33.8*</td><td>49.9</td>
+            <td>46.7*</td><td>52.3</td>
+            <td>26.6*</td><td>45.8 / 56.0</td>
+            <td>56.2*</td><td>26.5</td>
+          </tr>
+          <tr class="ours">
+            <td>EVA-KTO</td>
+            <td>35.6*</td><td>53.2</td>
+            <td>28.7*</td><td>57.4</td>
+            <td>24.1*</td><td>45.1 / 56.5</td>
+            <td>34.5*</td><td>36.0</td>
+          </tr>
+          <tr class="ours best">
+            <td><strong>EVA-GRPO</strong></td>
+            <td>25.3*</td><td><strong>55.0</strong></td>
+            <td>22.2*</td><td><strong>68.3</strong></td>
+            <td>22.8*</td><td><strong>48.4 / 60.2</strong></td>
+            <td>26.8*</td><td><strong>43.3</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="fig-caption" style="margin-top:12px">
+        * Adaptive frame count — values are per-video averages.
+        <strong>Bold</strong> = best open-source result per benchmark.
+      </p>
+    </div>
+
+    <!-- Table 2: Video-Holmes -->
+    <h3 class="table-label reveal" style="margin-top:52px">Video-Holmes Zero-Shot Benchmark</h3>
     <div class="table-wrap reveal">
       <table class="results-table main-table">
         <thead>
           <tr>
             <th>Model</th>
             <th>Frames</th>
-            <th>SR</th>
-            <th>IMC</th>
-            <th>TCI</th>
-            <th>TA</th>
-            <th>MHR</th>
-            <th>PAR</th>
-            <th>CTI</th>
+            <th>SR</th><th>IMC</th><th>TCI</th><th>TA</th>
+            <th>MHR</th><th>PAR</th><th>CTI</th>
             <th>Overall</th>
           </tr>
         </thead>
         <tbody>
           <tr class="group-header"><td colspan="10">Closed-Source Models</td></tr>
-          <tr>
+          <tr class="closed-source">
             <td>GPT-4o</td><td>32</td>
             <td>50.0</td><td>49.6</td><td>38.8</td><td>30.0</td><td><strong>44.0</strong></td><td>39.2</td><td>37.0</td><td>42.0</td>
           </tr>
-          <tr>
+          <tr class="closed-source">
             <td>Gemini-2.0-Flash</td><td>—</td>
             <td>41.8</td><td>33.7</td><td>23.1</td><td>20.5</td><td>30.1</td><td>26.8</td><td>33.7</td><td>30.6</td>
           </tr>
@@ -494,16 +620,17 @@
             <td>42.8</td><td>36.2</td><td>22.7</td><td>39.5</td><td>22.9</td><td>32.0</td><td>31.2</td><td>32.9</td>
           </tr>
           <tr class="ours best">
-            <td><strong>EVA-GRPO</strong></td><td><strong>36.8*</strong></td>
+            <td><strong>EVA-GRPO</strong></td><td>36.8*</td>
             <td><strong>49.3</strong></td><td>39.5</td><td>30.4</td><td><strong>44.5</strong></td><td>27.1</td><td><strong>37.6</strong></td><td>35.2</td><td><strong>37.2</strong></td>
           </tr>
         </tbody>
       </table>
-      <p class="fig-caption" style="margin-top:14px">
-        * EVA uses adaptive frame sampling; reported frames are averages per video.
-        <strong>Bold</strong> = best among open-source models per column.
+      <p class="fig-caption" style="margin-top:12px">
+        * Adaptive frame count — values are per-video averages.
+        <strong>Bold</strong> = best open-source result per column.
       </p>
     </div>
+
   </div>
 </section>
 
