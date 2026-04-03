@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVA: Efficient Video Agent</title>
+  <link rel="stylesheet" href="static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content container">
+    <div class="badge-row">
+      <span class="badge badge-conference">CVPR 2026</span>
+      <span class="badge badge-arxiv">arXiv 2603.22918</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="highlight">EVA</span>: Efficient Reinforcement Learning<br/>
+      for End-to-End Video Agent
+    </h1>
+
+    <p class="authors">
+      <a href="#" class="author-link">Yaolun Zhang</a><sup>*</sup>,
+      <a href="#" class="author-link">Ruohui Wang</a><sup>*†</sup>,
+      <a href="#" class="author-link">Jiahao Wang</a><sup>*‡</sup>,
+      <a href="#" class="author-link">Yepeng Tang</a>,
+      <a href="#" class="author-link">Xuanyu Zheng</a>,
+      <a href="#" class="author-link">Haonan Duan</a>,
+      <a href="#" class="author-link">Hao Lu</a>,
+      <a href="#" class="author-link">Hanming Deng</a>,
+      <a href="#" class="author-link">Lewei Lu</a><sup>†</sup>
+    </p>
+    <p class="affiliation">SenseTime Research</p>
+    <p class="author-notes">
+      <sup>*</sup>Equal contribution &nbsp; <sup>†</sup>Corresponding author &nbsp; <sup>‡</sup>Project lead
+    </p>
+
+    <div class="btn-row">
+      <a href="https://arxiv.org/abs/2603.22918" class="btn btn-primary" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        Paper
+      </a>
+      <a href="https://github.com/wangruohui/EfficientVideoAgent" class="btn btn-secondary" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Code
+      </a>
+      <a href="https://arxiv.org/pdf/2603.22918" class="btn btn-outline" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        PDF
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== TL;DR ===== -->
+<section class="tldr">
+  <div class="container">
+    <div class="tldr-card reveal">
+      <span class="tldr-label">TL;DR</span>
+      <p>
+        EVA transforms video MLLMs from <em>passive frame-consumers</em> into <em>active planners</em> — deciding
+        <strong>what</strong>, <strong>when</strong>, and <strong>how</strong> to watch before touching any pixels.
+        Result: <strong class="stat">6–12% accuracy gain</strong> with <strong class="stat">98% fewer visual tokens</strong>
+        across six video understanding benchmarks.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MOTIVATION ===== -->
+<section class="section" id="motivation">
+  <div class="container">
+    <h2 class="section-title reveal">Motivation</h2>
+    <p class="section-subtitle reveal">
+      Existing video understanding approaches suffer from two fundamental limitations:
+    </p>
+
+    <div class="motivation-cards reveal">
+      <div class="mcard mcard-bad">
+        <div class="mcard-icon">🎞️</div>
+        <h3>Passive MLLM</h3>
+        <p>Processes <em>all</em> uniformly sampled frames at once. A single relevant frame is buried among hundreds of irrelevant ones — leading to visual misguidance and <strong>wrong answers</strong>.</p>
+        <div class="verdict bad">✗ No selective attention</div>
+      </div>
+      <div class="mcard mcard-mid">
+        <div class="mcard-icon">🤖</div>
+        <h3>Traditional Agent</h3>
+        <p>Adds tool calls, but remains <em>perception-first</em>: the agent sees uniform frames before reasoning. Fixed FPS and resolution prevent adaptive information gathering.</p>
+        <div class="verdict mid">✗ Rigid, manual workflow</div>
+      </div>
+      <div class="mcard mcard-good">
+        <div class="mcard-icon">👁️</div>
+        <h3>EVA (Ours)</h3>
+        <p><em>Plans before perceiving</em>: reads only the question, forms a strategy, then selects exactly which frames to fetch at what resolution — using 98% fewer tokens.</p>
+        <div class="verdict good">✓ Planning-before-perception</div>
+      </div>
+    </div>
+
+    <div class="fig-wrapper reveal">
+      <img src="static/media/fig1.png" alt="Comparison of passive, traditional agent, and EVA approaches" class="fig-img" />
+      <p class="fig-caption">
+        <strong>Figure 1.</strong> Three paradigms for video understanding.
+        <span class="badge badge-bad">Passive MLLM</span> uses uniform sampling.
+        <span class="badge badge-mid">Traditional Agent</span> adds tool calls but starts from frames.
+        <span class="badge badge-good">EVA</span> plans from the query, then selects frames strategically.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY EVA ===== -->
+<section class="section section-dark" id="why">
+  <div class="container">
+    <h2 class="section-title reveal">Why Planning-Before-Perception Works</h2>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-icon">🚫</div>
+        <h3>Avoids Visual Misguidance</h3>
+        <p>Uniformly sampled frames often contain irrelevant actions that mislead the model. EVA establishes intent textually <em>before</em> any visual interaction, preventing distraction from noisy frames.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <h3>Saves Visual Tokens</h3>
+        <p>By identifying which segments matter upfront, EVA fetches only necessary frames at optimal resolution — reducing visual token consumption by up to <strong>98%</strong> compared to Qwen2.5-VL.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🎯</div>
+        <h3>Active, Goal-Driven Perception</h3>
+        <p>The iterative <strong>Summary → Plan → Action → Reflection</strong> loop enables the agent to autonomously adapt its strategy based on what it sees — like a detective gathering evidence.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📐</div>
+        <h3>Flexible Tool Interface</h3>
+        <p>EVA's tools expose <code>nframes</code>, <code>resize</code>, <code>start_time</code>, and <code>end_time</code> — giving the agent full control over perception granularity. Traditional agents use fixed FPS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METHOD ===== -->
+<section class="section" id="method">
+  <div class="container">
+    <h2 class="section-title reveal">Method</h2>
+    <p class="section-subtitle reveal">
+      EVA uses a three-stage training pipeline to learn efficient video reasoning end-to-end.
+    </p>
+
+    <!-- Reasoning loop -->
+    <div class="loop-diagram reveal">
+      <h3 class="loop-title">Iterative Reasoning Loop</h3>
+      <div class="loop-steps">
+        <div class="loop-step">
+          <div class="loop-icon">📝</div>
+          <div class="loop-label">Summary</div>
+          <div class="loop-desc">Summarize current observations and known facts</div>
+        </div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">
+          <div class="loop-icon">🗺️</div>
+          <div class="loop-label">Plan</div>
+          <div class="loop-desc">Decide what to look at next and why</div>
+        </div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">
+          <div class="loop-icon">🔧</div>
+          <div class="loop-label">Action</div>
+          <div class="loop-desc">Issue tool call with precise params</div>
+        </div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">
+          <div class="loop-icon">🔍</div>
+          <div class="loop-label">Reflection</div>
+          <div class="loop-desc">Evaluate evidence; repeat or answer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Training pipeline -->
+    <div class="pipeline reveal">
+      <h3 class="pipeline-title">Three-Stage Training Pipeline</h3>
+      <div class="pipeline-stages">
+        <div class="stage stage-sft">
+          <div class="stage-num">01</div>
+          <div class="stage-name">SFT</div>
+          <div class="stage-full">Supervised Fine-Tuning</div>
+          <div class="stage-detail">
+            <strong>10K samples</strong> from llava-video + cgbench.<br/>
+            Teaches tool-call formatting and basic frame-selection strategies via cold-start training.
+          </div>
+          <div class="stage-tag">Cold Start</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="stage stage-kto">
+          <div class="stage-num">02</div>
+          <div class="stage-name">KTO</div>
+          <div class="stage-full">Kahneman–Tversky Optimization</div>
+          <div class="stage-detail">
+            <strong>11K labeled trajectories</strong> (63% correct / 37% failure).<br/>
+            Corrects over/under-sampling failures from SFT without needing paired preferences.
+          </div>
+          <div class="stage-tag">Preference Correction</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="stage stage-grpo">
+          <div class="stage-num">03</div>
+          <div class="stage-name">GRPO</div>
+          <div class="stage-full">Group Relative Policy Optimization</div>
+          <div class="stage-detail">
+            <strong>9.6K open-ended + 1.1K MC QA</strong> pairs.<br/>
+            Online RL with accuracy + format rewards. Data-enhanced pipeline mines hard cases.
+          </div>
+          <div class="stage-tag">Online RL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEMO VIDEO ===== -->
+<section class="section section-dark" id="demo">
+  <div class="container">
+    <h2 class="section-title reveal">Demo</h2>
+    <p class="section-subtitle reveal">
+      Watch EVA plan before perceiving — and compare it against passive and traditional agent approaches.
+    </p>
+    <div class="video-wrapper reveal">
+      <video id="demo-video" controls muted playsinline loop poster="static/media/fig1.png">
+        <source src="static/media/demo.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="fig-caption reveal">
+      EVA first reads the question, forms a strategy, surveys the full video at low resolution, then zooms into the relevant segment — achieving the correct answer with minimal visual tokens.
+    </p>
+  </div>
+</section>
+
+<!-- ===== RESULTS ===== -->
+<section class="section" id="results">
+  <div class="container">
+    <h2 class="section-title reveal">Evaluation Results</h2>
+    <p class="section-subtitle reveal">
+      EVA achieves state-of-the-art performance on six video understanding benchmarks while using drastically fewer frames.
+    </p>
+
+    <!-- Efficiency callout -->
+    <div class="callout-row reveal">
+      <div class="callout">
+        <div class="callout-num">37.2%</div>
+        <div class="callout-label">Video-Holmes Overall<br/><span class="callout-sub">vs 36.5% Video-R1</span></div>
+      </div>
+      <div class="callout">
+        <div class="callout-num">98%</div>
+        <div class="callout-label">Fewer Visual Tokens<br/><span class="callout-sub">vs Qwen2.5-VL (499K → 10K)</span></div>
+      </div>
+      <div class="callout">
+        <div class="callout-num">68.3%</div>
+        <div class="callout-label">MLVU Score<br/><span class="callout-sub">vs 59.1% FrameThinker</span></div>
+      </div>
+      <div class="callout">
+        <div class="callout-num">43.3%</div>
+        <div class="callout-label">LVBench Score<br/><span class="callout-sub">vs 36.6% FrameThinker</span></div>
+      </div>
+    </div>
+
+    <!-- Tab switcher -->
+    <div class="tabs reveal">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="video-holmes">Video-Holmes</button>
+        <button class="tab-btn" data-tab="long-bench">LongVideoBench</button>
+        <button class="tab-btn" data-tab="mlvu">MLVU</button>
+        <button class="tab-btn" data-tab="videomme">VideoMME</button>
+        <button class="tab-btn" data-tab="efficiency">Efficiency</button>
+      </div>
+
+      <div id="video-holmes" class="tab-content active">
+        <div class="results-table-wrapper">
+          <img src="static/media/results.png" alt="Video-Holmes benchmark results" class="results-img" />
+        </div>
+        <p class="fig-caption">Video-Holmes zero-shot benchmark. EVA-GRPO achieves 49.3 SR and 37.2 Overall, outperforming all open-source models including Video-R1 (36.5) and VideoChat-R1 (33.0).</p>
+      </div>
+
+      <div id="long-bench" class="tab-content">
+        <div class="table-wrap">
+          <table class="results-table">
+            <thead>
+              <tr><th>Model</th><th>Frames</th><th>LongVideoBench</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Qwen2.5-VL-7B</td><td>768</td><td>53.4</td></tr>
+              <tr><td>VideoChat-R1</td><td>64</td><td>52.6</td></tr>
+              <tr><td>FrameThinker</td><td>—</td><td>52.9</td></tr>
+              <tr class="ours"><td><strong>EVA-SFT</strong></td><td>33.8</td><td>49.9</td></tr>
+              <tr class="ours"><td><strong>EVA-KTO</strong></td><td>35.6</td><td>53.2</td></tr>
+              <tr class="ours best"><td><strong>EVA-GRPO</strong></td><td>25.3</td><td><strong>55.1</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fig-caption">LongVideoBench: EVA-GRPO achieves 55.1% using only 25.3 frames on average — fewer than any baseline.</p>
+      </div>
+
+      <div id="mlvu" class="tab-content">
+        <div class="table-wrap">
+          <table class="results-table">
+            <thead>
+              <tr><th>Model</th><th>Avg Frames</th><th>MLVU</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Qwen2.5-VL-7B</td><td>768</td><td>60.7</td></tr>
+              <tr><td>FrameThinker</td><td>—</td><td>59.1</td></tr>
+              <tr class="ours"><td><strong>EVA-SFT</strong></td><td>46.7</td><td>52.3</td></tr>
+              <tr class="ours"><td><strong>EVA-KTO</strong></td><td>28.7</td><td>57.4</td></tr>
+              <tr class="ours best"><td><strong>EVA-GRPO</strong></td><td>22.2</td><td><strong>68.3</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fig-caption">MLVU: EVA-GRPO achieves 68.3% using only 22.2 frames — a 9.2% gain over FrameThinker with far fewer frames.</p>
+      </div>
+
+      <div id="videomme" class="tab-content">
+        <div class="table-wrap">
+          <table class="results-table">
+            <thead>
+              <tr><th>Model</th><th>Avg Frames</th><th>VideoMME Long</th><th>VideoMME Overall</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Qwen2.5-VL-7B</td><td>768</td><td>52.6</td><td>63.3</td></tr>
+              <tr><td>FrameThinker</td><td>—</td><td>47.6</td><td>—</td></tr>
+              <tr class="ours"><td><strong>EVA-SFT</strong></td><td>26.6</td><td>45.8</td><td>56.0</td></tr>
+              <tr class="ours"><td><strong>EVA-KTO</strong></td><td>24.1</td><td>45.1</td><td>56.5</td></tr>
+              <tr class="ours best"><td><strong>EVA-GRPO</strong></td><td>22.8</td><td><strong>48.4</strong></td><td><strong>60.2</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fig-caption">VideoMME: EVA-GRPO achieves 60.2% overall using only 22.8 frames, outperforming FrameThinker on long videos (48.4 vs 47.6).</p>
+      </div>
+
+      <div id="efficiency" class="tab-content">
+        <div class="chart-wrap">
+          <canvas id="ablationChart" width="800" height="400"></canvas>
+        </div>
+        <p class="fig-caption">Ablation: Each training stage improves accuracy while reducing frame count. GRPO cuts frames by 52% on MLVU while adding 10.9% accuracy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BIBTEX ===== -->
+<section class="section section-dark" id="bibtex">
+  <div class="container">
+    <h2 class="section-title reveal">BibTeX</h2>
+    <div class="bibtex-wrap reveal">
+      <pre class="bibtex"><code>@article{zhang2026eva,
+  title   = {EVA: Efficient Reinforcement Learning for End-to-End Video Agent},
+  author  = {Zhang, Yaolun and Wang, Ruohui and Wang, Jiahao and Tang, Yepeng
+             and Zheng, Xuanyu and Duan, Haonan and Lu, Hao and Deng, Hanming
+             and Lu, Lewei},
+  journal = {arXiv preprint arXiv:2603.22918},
+  year    = {2026}
+}</code></pre>
+      <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <p>
+      EVA &nbsp;|&nbsp; SenseTime Research &nbsp;|&nbsp; CVPR 2026
+      &nbsp;&nbsp;·&nbsp;&nbsp;
+      Page inspired by <a href="https://nerfies.github.io" target="_blank">Nerfies</a>
+    </p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
